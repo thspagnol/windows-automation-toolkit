@@ -1,4 +1,5 @@
-# 🛠️ Windows Office Automation Toolkit
+# 🛠️ Assistente de TI - TS (V01)
+> Desenvolvido por @th_spagnolDev
 
 Este projeto consiste em um script em lote (`.bat`) desenvolvido para automatizar tarefas rotineiras de manutenção, diagnóstico de rede e produtividade em ambientes corporativos Windows.
 
@@ -41,4 +42,5 @@ O script oferece um menu interativo com as seguintes ferramentas:
 Este script é fornecido "como está", para fins educacionais e de produtividade pessoal. Recomenda-se revisar o código antes de executá-lo em ambientes de produção sensíveis.
 
 ---
+
 *Desenvolvido por Thiago Spagnol*
