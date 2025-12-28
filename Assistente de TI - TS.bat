@@ -1,12 +1,20 @@
 @echo off
-title Painel de Ferramentas - Thiago
+rem ============================================================
+rem CHANGELOG:
+rem V01 - Versao Inicial (Limpeza, Rede, Modo Trabalho)
+rem V02 - Adicionado Verificador de Disco e Reparador SFC
+rem ============================================================
+title Assistente de TI - TS
 color 1F
+...
 
 :MENU
 cls
-echo ===============================================
-echo           PAINEL DE CONTROLE - THIAGO
-echo ===============================================
+color 1F
+echo ==========================================================
+echo            PAINEL DE CONTROLE - ASSISTENTE DE TI - TS
+echo                 V02 - @th_spagnolDev
+echo ==========================================================
 echo.
 echo   [1] Limpeza Geral (Temp + Cache DNS)
 echo   [2] Destravar Impressora (Reiniciar Spooler)
@@ -15,11 +23,13 @@ echo   [4] Teste de Conexao (Ping Google/DNS)
 echo   [5] Info do PC (Para Suporte TI)
 echo   [6] Modo Trabalho (Outlook + TOTVS HTML + Whats)
 echo   [7] Agendar Desligamento
+echo   [8] Verificar Espaco em Disco (HD/SSD)
+echo   [9] Reparar Sistema (SFC Scan - ATENCAO)
 echo   [0] Sair
 echo.
-echo ===============================================
-echo   Nota: Execute como ADMINISTRADOR para opcoes 1, 2 e 3.
-echo ===============================================
+echo ==========================================================
+echo   Nota: Execute como ADMINISTRADOR para opcoes 1, 2, 3 e 9.
+echo ==========================================================
 set /p opcao=Digite sua opcao: 
 
 if "%opcao%"=="1" goto LIMPEZA
@@ -29,6 +39,8 @@ if "%opcao%"=="4" goto PING
 if "%opcao%"=="5" goto INFO
 if "%opcao%"=="6" goto TRABALHO
 if "%opcao%"=="7" goto TIMER
+if "%opcao%"=="8" goto DISCO
+if "%opcao%"=="9" goto REPARO
 if "%opcao%"=="0" exit
 
 echo Opcao invalida!
@@ -115,8 +127,8 @@ start outlook.exe
 timeout /t 2 >nul
 
 echo 2. Abrindo TOTVS Smart Client HTML...
-rem --- ATENCAO: TROQUE O ENDERECO ABAIXO PELO LINK DO SEU TOTVS ---
-start chrome.exe "http://link-do-seu-erp.com.br"
+rem --- ATENCAO ---
+start chrome.exe "http://LINK_DO_SEU_PROTHEUS_AQUI"
 timeout /t 2 >nul
 
 echo 3. Abrindo WhatsApp...
@@ -136,5 +148,41 @@ shutdown -s -t %seg% -f
 echo.
 echo O computador desligara em %min% minutos.
 echo Para CANCELAR, digite 'shutdown -a' no executar.
+pause
+goto MENU
+
+:DISCO
+cls
+echo === Verificando Espaco em Disco ===
+echo.
+echo Listando unidades de armazenamento...
+echo.
+wmic logicaldisk get size,freespace,caption
+echo.
+echo Nota: Os valores estao em Bytes.
+echo Para converter: 1073741824 Bytes = 1 GB
+pause
+goto MENU
+
+:REPARO
+cls
+echo =================================================
+echo        ATENCAO - LEIA ANTES DE CONTINUAR
+echo =================================================
+echo.
+echo Voce escolheu o Verificador de Integridade (SFC).
+echo 1. Isso vai escanear todo o Windows buscando erros.
+echo 2. Esse processo pode levar de 15 a 40 MINUTOS.
+echo 3. O computador pode ficar lento durante o processo.
+echo.
+set /p confirma=Deseja continuar? (S/N): 
+if /I "%confirma%" NEQ "S" goto MENU
+
+echo.
+echo Iniciando o Scan... Por favor, aguarde.
+echo Nao feche esta janela.
+sfc /scannow
+echo.
+echo Processo finalizado. Verifique a mensagem acima.
 pause
 goto MENU
