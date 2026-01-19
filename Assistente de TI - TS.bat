@@ -1,36 +1,48 @@
 @echo off
-rem ============================================================
-rem CHANGELOG:
-rem V01 - Versao Inicial (Limpeza, Rede, Modo Trabalho)
-rem V02 - Adicionado Verificador de Disco e Reparador SFC
-rem ============================================================
-title Assistente de TI - TS
+rem ============================================================================
+rem NOME DO PROJETO: Assistente de TI - TS
+rem VERSAO: V03.1 (Stable/Fix)
+rem AUTOR: @th_spagnolDev
+rem ============================================================================
+
+rem --- [ AREA DE CONFIGURACAO ] -----------------------------------------------
+set "TITULO_JANELA=Assistente de TI - V03.1 - @th_spagnolDev"
+set "ARQUIVO_LOG=log_atividades.txt"
+
+rem Apps de Trabalho
+set "NAVEGADOR=chrome.exe"
+set "LINK_ERP=http://link-do-seu-erp.com.br"
+set "APP_WHATSAPP=whatsapp:"
+set "APP_EMAIL=outlook.exe"
+rem ----------------------------------------------------------------------------
+
+title %TITULO_JANELA%
 color 1F
-...
 
 :MENU
 cls
-color 1F
+echo.
 echo ==========================================================
-echo            PAINEL DE CONTROLE - ASSISTENTE DE TI - TS
-echo                 V02 - @th_spagnolDev
+echo      ASSISTENTE TECNICO E AUTOMACAO - THIAGO SPAGNOL
+echo                   V03.1 - Professional
+echo                  Dev: @th_spagnolDev
 echo ==========================================================
 echo.
 echo   [1] Limpeza Geral (Temp + Cache DNS)
-echo   [2] Destravar Impressora (Reiniciar Spooler)
-echo   [3] Corrigir Windows Update (Reiniciar Servico)
-echo   [4] Teste de Conexao (Ping Google/DNS)
-echo   [5] Info do PC (Para Suporte TI)
-echo   [6] Modo Trabalho (Outlook + TOTVS HTML + Whats)
+echo   [2] Destravar Impressora (Spooler)
+echo   [3] Corrigir Windows Update
+echo   [4] Teste de Conexao (Ping)
+echo   [5] Info do PC (Hostname/IP)
+echo   [6] Modo Trabalho (Apps de Rotina)
 echo   [7] Agendar Desligamento
-echo   [8] Verificar Espaco em Disco (HD/SSD)
-echo   [9] Reparar Sistema (SFC Scan - ATENCAO)
+echo   [8] Espaco em Disco (Storage)
+echo   [9] Reparar Sistema (SFC - Lento)
 echo   [0] Sair
 echo.
 echo ==========================================================
 echo   Nota: Execute como ADMINISTRADOR para opcoes 1, 2, 3 e 9.
 echo ==========================================================
-set /p opcao=Digite sua opcao: 
+set /p opcao=Digite a opcao desejada: 
 
 if "%opcao%"=="1" goto LIMPEZA
 if "%opcao%"=="2" goto IMPRESSORA
@@ -43,15 +55,17 @@ if "%opcao%"=="8" goto DISCO
 if "%opcao%"=="9" goto REPARO
 if "%opcao%"=="0" exit
 
-echo Opcao invalida!
-pause
+echo.
+echo [ERRO] Opcao invalida.
+timeout /t 2 >nul
 goto MENU
 
 :LIMPEZA
+call :REGISTRAR_LOG "Executou Limpeza Geral"
 cls
 echo === Limpando Arquivos Temporarios ===
-del /q/f/s %TEMP%\*
-del /q/f/s C:\Windows\Temp\*
+del /q/f/s %TEMP%\* >nul 2>&1
+del /q/f/s C:\Windows\Temp\* >nul 2>&1
 echo.
 echo === Limpando Cache de Internet ===
 ipconfig /flushdns
@@ -61,35 +75,33 @@ pause
 goto MENU
 
 :IMPRESSORA
+call :REGISTRAR_LOG "Executou Fix de Impressora"
 cls
-echo === Destravando Fila de Impressao ===
-echo Parando servico de impressao...
+echo === Reiniciando Servico de Impressao ===
 net stop spooler
-echo Limpando arquivos presos...
-del /F /Q /S C:\Windows\System32\spool\PRINTERS\*
-echo Reiniciando servico...
+del /F /Q /S C:\Windows\System32\spool\PRINTERS\* >nul 2>&1
 net start spooler
-echo Concluido. Tente imprimir novamente.
+echo Concluido.
 pause
 goto MENU
 
 :WINUPDATE
+call :REGISTRAR_LOG "Executou Fix Windows Update"
 cls
-echo === Reiniciando Servicos do Windows Update ===
-echo Isso pode demorar um pouco...
+echo === Reiniciando Servicos de Update ===
 net stop wuauserv
 net stop bits
 net stop cryptsvc
-echo.
-echo Iniciando servicos novamente...
+echo Iniciando servicos...
 net start wuauserv
 net start bits
 net start cryptsvc
-echo Concluido. Tente buscar atualizacoes agora.
+echo Concluido.
 pause
 goto MENU
 
 :PING
+call :REGISTRAR_LOG "Executou Teste de Conexao"
 cls
 echo === Testando Conexao ===
 echo Testando acesso ao Google...
@@ -104,50 +116,45 @@ goto MENU
 
 :INFO
 cls
-echo === Informacoes para Suporte ===
+echo === Informacoes do Sistema ===
 echo.
-echo NOME DA MAQUINA:
-hostname
+echo Hostname: %computername%
+echo Usuario:  %username%
 echo.
-echo SEU ENDERECO IP:
+echo --- Enderecos IP ---
 ipconfig | find "IPv4"
-echo.
-echo USUARIO: %username%
 echo.
 pause
 goto MENU
 
 :TRABALHO
+call :REGISTRAR_LOG "Iniciou Modo Trabalho"
 cls
-echo === Iniciando Modo Trabalho ===
+echo === Iniciando Ambiente de Trabalho ===
 echo.
-
-echo 1. Abrindo Outlook Classic...
-start outlook.exe
+echo [1/3] Iniciando E-mail (%APP_EMAIL%)...
+start %APP_EMAIL%
 timeout /t 2 >nul
 
-echo 2. Abrindo TOTVS Smart Client HTML...
-rem --- ATENCAO ---
-start chrome.exe "http://LINK_DO_SEU_PROTHEUS_AQUI"
+echo [2/3] Acessando ERP Web...
+start %NAVEGADOR% "%LINK_ERP%"
 timeout /t 2 >nul
 
-echo 3. Abrindo WhatsApp...
-start whatsapp:
-
+echo [3/3] Abrindo Comunicador...
+start %APP_WHATSAPP%
 echo.
-echo Todos os aplicativos foram chamados.
+echo Ambiente carregado.
 pause
 goto MENU
 
 :TIMER
 cls
 echo === Agendar Desligamento ===
-set /p min=Quantos MINUTOS para desligar? 
+set /p min=Minutos para desligar: 
 set /a seg=min*60
+call :REGISTRAR_LOG "Agendou desligamento para %min% minutos"
 shutdown -s -t %seg% -f
-echo.
-echo O computador desligara em %min% minutos.
-echo Para CANCELAR, digite 'shutdown -a' no executar.
+echo Agendado.
 pause
 goto MENU
 
@@ -186,3 +193,8 @@ echo.
 echo Processo finalizado. Verifique a mensagem acima.
 pause
 goto MENU
+
+rem --- FUNCAO DE LOG ---
+:REGISTRAR_LOG
+echo [%DATE% - %TIME%] Usuario: %USERNAME% - Acao: %~1 >> %ARQUIVO_LOG%
+goto :eof
