@@ -1,45 +1,46 @@
-# 🛠️ Assistente de TI - TS (V02)
-> Desenvolvido por @th_spagnolDev
+# 🛠️ Assistente de TI - TS (V03.1)
+> **Desenvolvido por:** [@th_spagnolDev](https://github.com/th_spagnolDev)  
+> **Versão:** Stable/Professional
 
-Este projeto consiste em um script em lote (`.bat`) desenvolvido para automatizar tarefas rotineiras de manutenção, diagnóstico de rede e produtividade em ambientes corporativos Windows.
+Ferramenta de automação CLI (Command Line Interface) desenvolvida em Batch Script para otimizar rotinas de manutenção, diagnóstico de rede e produtividade em ambientes Windows corporativos.
 
-O objetivo é simplificar processos que exigiriam múltiplos cliques ou comandos manuais, centralizando-os em um menu interativo (CLI) de fácil uso.
+Diferente de scripts comuns, este projeto implementa **logs de auditoria**, **centralização de configurações** e **tratamento de erros**, seguindo boas práticas de desenvolvimento.
 
-## 🚀 Funcionalidades
+## 🚀 Funcionalidades Principais
 
-### 🧹 Manutenção e Sistema
-- **Limpeza de Arquivos Temporários:** Remove arquivos de cache do sistema e libera espaço.
-- **Correção de Windows Update:** Reinicia serviços críticos de atualização travados.
-- **Destravar Impressora:** Reinicia o Spooler de impressão e limpa filas travadas.
-- **Reparar Sistema (NOVO):** Executa o *System File Checker* (SFC) para corrigir arquivos corrompidos do Windows.
-- **Verificar Disco (NOVO):** Exibe o espaço livre e total das unidades de armazenamento.
+### ⚙️ Arquitetura e Controle
+- **Central de Configuração:** Variáveis globais no início do código para fácil adaptação (Hardcode-free).
+- **Sistema de Logs:** Registro automático de todas as ações executadas em `log_atividades.txt` para auditoria.
+- **Interface Robusta:** Menu interativo com tratamento de erros de input e encoding ANSI.
 
-### 🌐 Rede e Diagnóstico
-- **Reparo de Conexão:** Renova endereços IP e limpa cache DNS.
-- **Teste de Ping:** Verifica conectividade com serviços externos (Google/Cloudflare).
-- **Info Rápida:** Exibe Hostname e IP para facilitar suporte técnico.
+### 🛠️ Ferramentas Inclusas
+1.  **Modo Trabalho:** Inicialização simultânea de ERP (Web), E-mail e Comunicadores configuráveis.
+2.  **Manutenção:** Limpeza de arquivos temporários e cache DNS.
+3.  **Correção:** Reinício de serviços de impressão (Spooler) e Windows Update.
+4.  **Diagnóstico:** Verificação de latência (Ping), integridade de sistema (SFC) e espaço em disco.
+5.  **Utils:** Info de Hostname/IP e agendamento de desligamento.
 
-### 💼 Produtividade (Modo Trabalho)
-- **Launcher Automático:** Inicia Outlook, ERP (TOTVS Web) e WhatsApp simultaneamente com apenas uma opção.
-- **Agendamento de Desligamento:** Timer simples para desligamento automático.
-
-## ⚠️ Pré-requisitos
+## 📋 Pré-requisitos
 
 - Sistema Operacional: Windows 10 ou 11.
-- Permissões: Algumas funções (Limpeza, Impressora, Update, Reparo) exigem execução como **Administrador**.
+- Permissões: Execução como **Administrador** recomendada para acesso total às ferramentas de sistema.
 
-## 🔧 Como Usar
+## 🔧 Instalação e Configuração
 
-1. Baixe o arquivo `Ferramentas.bat`.
-2. **Configuração Inicial:**
-   - Clique com botão direito > Editar.
-   - Na seção `:TRABALHO`, atualize o link do ERP/Navegador para corresponder ao seu ambiente.
-3. **Execução:**
-   - Recomenda-se criar um atalho e configurar para "Executar como Administrador" para funcionalidade completa.
+1.  Baixe o arquivo `AssistenteV3.bat`.
+2.  Abra o arquivo com um editor de texto (Bloco de Notas ou VS Code).
+3.  Edite a seção **[ AREA DE CONFIGURACAO ]** no topo do arquivo:
+    ```batch
+    set "NAVEGADOR=chrome.exe"
+    set "LINK_ERP=[http://seu-sistema-aqui.com](http://seu-sistema-aqui.com)"
+    ```
+4.  Salve e execute.
 
 ## 📄 Histórico de Versões
-- **V01:** Lançamento inicial com funções básicas de rede e limpeza.
-- **V02:** Adição de ferramentas avançadas de diagnóstico (Disco e SFC).
+
+- **V01:** Protótipo funcional com limpeza e rede.
+- **V02:** Adição de ferramentas de disco e SFC.
+- **V03:** Refatoração completa (Code Cleanup), implementação de Logs e Variáveis Globais.
 
 ---
-*Disclaimer: Este script é fornecido para fins educacionais e de produtividade pessoal.*
+*Este projeto é open-source sob a licença MIT.*
