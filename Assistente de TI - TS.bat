@@ -1,37 +1,36 @@
 @echo off
 rem ============================================================================
-rem NOME DO PROJETO: Assistente de TI
-rem VERSAO: V04 (Master Edition)
+rem NOME DO PROJETO: Assistente de TI - TS
+rem VERSAO: V05 (Final Edition)
 rem AUTOR: @th_spagnolDev
 rem ============================================================================
 
 rem --- [ AREA DE CONFIGURACAO GLOBAL ] ----------------------------------------
-set "TITULO_JANELA=Assistente de TI - V04 - @th_spagnolDev"
+set "TITULO_JANELA=Assistente de TI - V05 Final - @th_spagnolDev"
 set "ARQUIVO_LOG=log_atividades.txt"
 
 rem Apps de Trabalho
-set "NAVEGADOR= chrome.exe"
-set "LINK_ERP= google.com.br"
-set "APP_WHATSAPP= whatsapp:"
-set "APP_EMAIL= outlook.exe"
+set "NAVEGADOR=chrome.exe"
+rem ATENCAO: Mantenha link generico para o GitHub
+set "LINK_ERP=http://seu-sistema-aqui.com"
+set "APP_WHATSAPP=whatsapp:"
+set "APP_EMAIL=outlook.exe"
 
-rem Configuracao de Backup (V04)
-rem Origem: Pasta que voce quer salvar (Ex: Meus Documentos)
+rem Configuracao de Backup
 set "BACKUP_ORIGEM=%USERPROFILE%\Documents"
-rem Destino: Pen Drive ou Rede (Ex: D:\Backup ou Z:\Bkp)
-set "BACKUP_DESTINO=C:\Backup_Automatico"
+set "BACKUP_DESTINO=D:\Backup_Automatico"
 rem ----------------------------------------------------------------------------
 
 title %TITULO_JANELA%
-color 0
+color 1F
 
 :MAIN_MENU
 cls
 echo.
 echo ==========================================================
 echo      ASSISTENTE TECNICO E AUTOMACAO - THIAGO SPAGNOL
-echo                   V04 - Master Edition
-echo                  Dev: @th_spagnolDev
+echo                   V05 - Final Edition
+echo                   Dev: @th_SpagnolDev
 echo ==========================================================
 echo.
 echo   SELECIONE UMA CATEGORIA:
@@ -39,7 +38,7 @@ echo.
 echo   [1] Ferramentas de Manutencao (Limpeza/Reparo)
 echo   [2] Diagnostico de Rede (Internet/Wi-Fi)
 echo   [3] Produtividade e Backup (Trabalho/Arquivos)
-echo   [4] Informacoes do Sistema
+echo   [4] Identidade do Hardware (Asset Tag/Serial) [NOVO]
 echo   [0] Sair
 echo.
 echo ==========================================================
@@ -64,7 +63,7 @@ echo   [1] Limpeza Geral (Temp)
 echo   [2] Destravar Impressora (Spooler)
 echo   [3] Corrigir Windows Update
 echo   [4] Reparar Sistema (SFC - Lento)
-echo   [5] Verificar Disco (Storage)
+echo   [5] Verificar Disco (Storage - GB)
 echo   [V] Voltar ao Menu Principal
 echo.
 echo ==========================================================
@@ -87,7 +86,7 @@ echo ==========================================================
 echo.
 echo   [1] Teste de Conexao (Ping Google)
 echo   [2] Renovar IP e DNS (Flush)
-echo   [3] Ver Senha do Wi-Fi Atual (Admin) [NOVO]
+echo   [3] Ver Senha do Wi-Fi Atual (Admin)
 echo   [V] Voltar ao Menu Principal
 echo.
 echo ==========================================================
@@ -108,7 +107,7 @@ echo ==========================================================
 echo.
 echo   [1] Iniciar Modo Trabalho (Apps)
 echo   [2] Agendar Desligamento
-echo   [3] Fazer Backup de Documentos (Robocopy) [NOVO]
+echo   [3] Fazer Backup de Documentos (Robocopy)
 echo   [V] Voltar ao Menu Principal
 echo.
 echo ==========================================================
@@ -124,64 +123,35 @@ rem --- [ FUNCOES DE EXECUCAO ] ------------------------------------------------
 
 :LIMPEZA
 call :REGISTRAR_LOG "Executou Limpeza Geral"
-cls
-echo === Limpando Arquivos Temporarios ===
 del /q/f/s %TEMP%\* >nul 2>&1
 del /q/f/s C:\Windows\Temp\* >nul 2>&1
-echo.
-echo === Limpando Cache de Internet ===
-ipconfig /flushdns
-echo.
 echo Limpeza concluida.
 pause
 goto SUB_MANUTENCAO
 
 :IMPRESSORA
-call :REGISTRAR_LOG "Executou Fix de Impressora"
-cls
-echo === Reiniciando Servico de Impressao ===
+call :REGISTRAR_LOG "Executou Fix Impressora"
 net stop spooler
 del /F /Q /S C:\Windows\System32\spool\PRINTERS\* >nul 2>&1
 net start spooler
-echo Concluido.
+echo Spooler reiniciado.
 pause
 goto SUB_MANUTENCAO
 
 :WINUPDATE
-call :REGISTRAR_LOG "Executou Fix Windows Update"
-cls
-echo === Reiniciando Servicos de Update ===
+call :REGISTRAR_LOG "Executou Fix Update"
 net stop wuauserv
-net stop bits
-net stop cryptsvc
-echo Iniciando servicos...
 net start wuauserv
-net start bits
-net start cryptsvc
-echo Concluido.
+echo Servicos reiniciados.
 pause
 goto SUB_MANUTENCAO
 
 :REPARO
-cls
-echo =================================================
-echo        ATENCAO - LEIA ANTES DE CONTINUAR
-echo =================================================
-echo.
-echo Voce escolheu o Verificador de Integridade (SFC).
-echo 1. Isso vai escanear todo o Windows buscando erros.
-echo 2. Esse processo pode levar de 15 a 40 MINUTOS.
-echo 3. O computador pode ficar lento durante o processo.
-echo.
-set /p confirma=Deseja continuar? (S/N): 
-if /I "%confirma%" NEQ "S" goto SUB_MANUTENCAO
-
-echo.
-echo Iniciando o Scan... Por favor, aguarde.
-echo Nao feche esta janela.
+echo ATENCAO: Isso demora.
+set /p c=Confirmar? (S/N): 
+if /I "%c%" NEQ "S" goto SUB_MANUTENCAO
+call :REGISTRAR_LOG "Iniciou SFC Scan"
 sfc /scannow
-echo.
-echo Processo finalizado. Verifique a mensagem acima.
 pause
 goto SUB_MANUTENCAO
 
@@ -197,16 +167,8 @@ pause
 goto SUB_MANUTENCAO
 
 :PING
-call :REGISTRAR_LOG "Executou Teste de Conexao"
-cls
-echo === Testando Conexao ===
-echo Testando acesso ao Google...
-ping www.google.com -n 4
-echo.
-echo Testando acesso ao DNS Cloudflare (Geral)...
-ping 1.1.1.1 -n 4
-echo.
-echo Se houver "Esgotado o tempo limite", sua internet esta instavel.
+call :REGISTRAR_LOG "Teste Ping"
+ping 8.8.8.8 -n 4
 pause
 goto SUB_REDE
 
@@ -234,7 +196,6 @@ echo ==========================================================
 echo PROCURE ABAIXO POR: "Conteudo da Chave" ou "Key Content"
 echo ==========================================================
 echo.
-rem Mostra o perfil completo para evitar erros de filtro
 netsh wlan show profile name="%manual_name%" key=clear
 echo.
 echo ==========================================================
@@ -267,7 +228,6 @@ echo.
 echo Pressione ENTER para iniciar ou feche para cancelar.
 pause >nul
 call :REGISTRAR_LOG "Iniciou Backup"
-rem /E = Subpastas, /XO = Excluir arquivos mais antigos (Soh copia novos), /R:1 = Tentar 1 vez se falhar
 robocopy "%BACKUP_ORIGEM%" "%BACKUP_DESTINO%" /E /XO /R:1 /W:1
 echo.
 echo Backup finalizado. Verifique a pasta de destino.
@@ -276,14 +236,26 @@ goto SUB_PRODUTIVIDADE
 
 :INFO
 cls
-echo === Informacoes do Sistema ===
+echo ==========================================================
+echo               IDENTIDADE DO HARDWARE (ASSET)
+echo ==========================================================
 echo.
-echo Hostname: %computername%
-echo Usuario:  %username%
+echo Coletando dados da BIOS e Placa Mae...
+echo ----------------------------------------------------------
 echo.
-echo --- Enderecos IP ---
-ipconfig | find "IPv4"
+powershell -NoProfile -Command "Get-CimInstance Win32_ComputerSystem | Select-Object -Property Manufacturer, Model, @{N='RAM(GB)';E={'{0:N0}' -f ($_.TotalPhysicalMemory/1GB)}} | Format-List"
+powershell -NoProfile -Command "Get-CimInstance Win32_Bios | Select-Object -Property SerialNumber, SMBIOSBIOSVersion | Format-List"
+powershell -NoProfile -Command "Get-CimInstance Win32_Processor | Select-Object -Property Name | Format-List"
+
+echo ----------------------------------------------------------
 echo.
+echo [Hostname]: %computername%
+echo [Usuario ]: %username%
+echo [IP Local]:
+ipconfig | findstr "IPv4"
+echo.
+echo ==========================================================
+call :REGISTRAR_LOG "Consultou Info Hardware (Asset)"
 pause
 goto MAIN_MENU
 
