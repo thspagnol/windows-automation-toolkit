@@ -1,41 +1,36 @@
-# 🛠️ Assistente de TI - TS (V04 Master)
+# 🛠️ Assistente de TI - TS (V05 Final Edition)
 > **Desenvolvido por:** [@th_spagnolDev](https://github.com/th_spagnolDev)  
-> **Versão:** V04.2 (Stable/Master)
+> **Status:** Final / Stable
 
-Ferramenta CLI (Command Line Interface) avançada para automação de suporte técnico, manutenção e backup em ambientes Windows.
+Ferramenta CLI profissional para automação de suporte, diagnóstico e gestão de ativos em ambientes Windows.
 
-Este projeto consolida scripts de manutenção em uma interface modular, substituindo a execução manual de dezenas de comandos por um menu intuitivo e seguro.
+O projeto evoluiu de scripts simples para uma **Suíte de Ferramentas** completa, utilizando Batch Script integrado com PowerShell para superar limitações nativas do CMD.
 
-## 🚀 Novidades da Versão V04
-- **Arquitetura Modular:** Menus divididos por categorias (Manutenção, Rede, Produtividade).
-- **Módulo de Backup:** Integração com **Robocopy** para backup incremental automático de documentos.
-- **Recuperação de Wi-Fi:** Ferramenta nativa para consulta de senhas de redes salvas (Security Audit).
+## 🚀 O Que Há de Novo na V05?
+- **Scanner de Identidade (Asset Tag):** Leitura direta da BIOS para exibir **Número de Série (Service Tag)**, Modelo e Fabricante. Essencial para abertura de chamados de garantia (Dell/Lenovo/HP).
+- **Correção de Compatibilidade:** Substituição de comandos obsoletos (`WMIC`) por chamadas modernas via **PowerShell**, garantindo funcionamento no Windows 11 (24H2+).
 
-## 📋 Funcionalidades
+## 📋 Funcionalidades Completas
 
-### 🔧 1. Manutenção & Sistema
-- **Limpeza Profunda:** Remoção de temporários do Windows e User Profile.
-- **Spooler Fix:** Reinício forçado de serviços de impressão travados.
-- **Health Check:** Verificação de integridade (SFC) e espaço em disco.
+### 🔧 1. Manutenção
+- **Limpeza:** Remoção de temporários e cache.
+- **Correção:** Reinício de Spooler de Impressão e Windows Update.
+- **Storage:** Análise de espaço em disco com conversão automática para GB.
 
-### 🌐 2. Rede & Conectividade
-- **Diagnóstico:** Testes de latência (Ping) e renovação de IP/DNS.
-- **Wi-Fi Audit:** Exibição de dados de perfis Wireless salvos (incluindo chaves de segurança).
+### 🌐 2. Rede
+- **Conectividade:** Testes de Ping e Flush DNS.
+- **Wi-Fi Audit:** Recuperação de senhas de redes salvas (Security Audit).
 
-### 💼 3. Produtividade
-- **Work Mode:** Launcher configurável para abrir ERP, E-mail e Comunicadores simultaneamente.
-- **Smart Backup:** Rotina de espelhamento de pastas críticas (Documentos -> Destino Externo).
+### 💼 3. Produtividade & Gestão
+- **Smart Backup:** Espelhamento incremental de documentos via Robocopy.
+- **Work Mode:** Launcher de aplicativos corporativos.
+- **Logs:** Auditoria local de uso com proteção de integridade (se configurado com NTFS).
 
-## ⚙️ Instalação e Configuração
+## ⚙️ Instalação
 
-1.  Baixe o arquivo `AssistenteV4.bat`.
-2.  Edite a seção **[ AREA DE CONFIGURACAO ]** no início do arquivo para definir:
-    * Caminhos dos softwares (Navegador, ERP).
-    * Origem e Destino do Backup (Ex: `set "BACKUP_DESTINO=F:\Backups"`).
-3.  Execute como **Administrador** para acesso total.
-
-## 🛡️ Segurança e Logs
-O sistema gera automaticamente um arquivo `log_atividades.txt` local, registrando data, hora e usuário de cada execução, garantindo rastreabilidade do uso técnico.
+1.  Baixe o arquivo `AssistenteV5.bat`.
+2.  Edite a seção **[ AREA DE CONFIGURACAO ]** para personalizar caminhos e links.
+3.  Execute como **Administrador**.
 
 ---
 *Projeto Open-Source sob licença MIT.*
