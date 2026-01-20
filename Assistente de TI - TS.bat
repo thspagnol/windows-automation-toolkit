@@ -10,10 +10,10 @@ set "TITULO_JANELA=Assistente de TI - V04 - @th_spagnolDev"
 set "ARQUIVO_LOG=log_atividades.txt"
 
 rem Apps de Trabalho
-set "NAVEGADOR=chrome.exe"
-set "LINK_ERP=http://seu-sistema-aqui.com"
-set "APP_WHATSAPP=whatsapp:"
-set "APP_EMAIL=outlook.exe"
+set "NAVEGADOR= chrome.exe"
+set "LINK_ERP= google.com.br"
+set "APP_WHATSAPP= whatsapp:"
+set "APP_EMAIL= outlook.exe"
 
 rem Configuracao de Backup (V04)
 rem Origem: Pasta que voce quer salvar (Ex: Meus Documentos)
@@ -23,7 +23,7 @@ set "BACKUP_DESTINO=C:\Backup_Automatico"
 rem ----------------------------------------------------------------------------
 
 title %TITULO_JANELA%
-color 1F
+color 0
 
 :MAIN_MENU
 cls
@@ -187,14 +187,12 @@ goto SUB_MANUTENCAO
 
 :DISCO
 cls
-echo === Verificando Espaco em Disco ===
+echo === Verificacao de Armazenamento (Via PowerShell) ===
 echo.
-echo Listando unidades de armazenamento...
-echo.
-wmic logicaldisk get size,freespace,caption
-echo.
-echo Nota: Os valores estao em Bytes.
-echo Para converter: 1073741824 Bytes = 1 GB
+echo Listando unidades (Valores em GB)...
+echo ---------------------------------------------------
+powershell -NoProfile -Command "Get-CimInstance -ClassName Win32_LogicalDisk | Where-Object {$_.DriveType -eq 3} | Select-Object DeviceID, @{Name='Total(GB)';Expression={'{0:N2}' -f ($_.Size/1GB)}}, @{Name='Livre(GB)';Expression={'{0:N2}' -f ($_.FreeSpace/1GB)}} | Format-Table -AutoSize"
+echo ---------------------------------------------------
 pause
 goto SUB_MANUTENCAO
 
